@@ -10,6 +10,11 @@ import { useEffect } from "react";
 import Loader from "../components/loader.jsx";
 import AdminUsersPage from "./admin/adminUserPage.jsx";
 import toast from "react-hot-toast";
+import { BiAnalyse, BiData, BiKey, BiUser } from "react-icons/bi";
+import AdminAnalyticsPage from "./admin/adminAnalyticsPage.jsx";
+import AdminApiKeysPage from "./admin/adminApiKeysPage.jsx";
+import AdminBiddingPage from "./admin/adminBiddingPage.jsx";
+import { BsCash } from "react-icons/bs";
 
 export default function AdminPage(){
     const navigate = useNavigate();
@@ -37,10 +42,10 @@ export default function AdminPage(){
             <div  className="w-full h-[400px] text-white text-2xl flex flex-col pl-[20px] pt-[20px]">
                 
                 {/* use <Link> tag instid of usinkg <a href> becuase you can stop refreshing when moving among pages */}
-                <Link to="/admin" className="w-full flex items-center h-[50px] gap-[10px]"><LuClipboardList/>Orders</Link>
-                <Link to="/admin/products" className="w-full flex items-center h-[50px] gap-[10px]"><LuBoxes/>Products</Link>
-                <Link to="/admin/users" className="w-full flex items-center h-[50px] gap-[10px]"><FiUsers/>Users</Link>
-                <Link to="/admin/reviews" className="w-full flex items-center h-[50px] gap-[10px]"><MdOutlineRateReview />Reviews</Link>
+                <Link to="/admin" className="w-full flex items-center h-[50px] gap-[10px]"><BiUser/>Users</Link>
+                <Link to="/admin/analytics" className="w-full flex items-center h-[50px] gap-[10px]"><BiAnalyse/>Analytics</Link>
+                <Link to="/admin/api-keys" className="w-full flex items-center h-[50px] gap-[10px]"><BiKey/>Api Keys</Link>
+                <Link to="/admin/bidding" className="w-full flex items-center h-[50px] gap-[10px]"><BsCash/>Bidding</Link>
                 
             </div>
 
@@ -54,6 +59,9 @@ export default function AdminPage(){
                 {/* <Route path="/" element={<AdminOrdersPage/>}/>
                 <Route path="products" element={<AdminProductPage/>}/>
                 <Route path="add-product" element={<AdminAddProductPage/>}/> */}
+                <Route path="analytics" element={<AdminAnalyticsPage/>}/>
+                <Route path="api-keys" element={<AdminApiKeysPage/>}/>
+                <Route path="bidding" element={<AdminBiddingPage/>}/>
                 <Route path="/" element={<AdminUsersPage/>}/>
                 <Route path="reviews" element={<h1>Reviews</h1>}/>
                 {/* <Route path="update-product" element={<AdminUpdateProductPage/>}/> */}
