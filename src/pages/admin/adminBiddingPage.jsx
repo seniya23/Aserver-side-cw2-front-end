@@ -17,7 +17,6 @@ import {
 	Filler,
 } from "chart.js";
 import {
-	exportToCSV,
 	exportChartImage,
 	generatePDFReport,
 	saveFilterPreset,
@@ -163,18 +162,7 @@ export default function AdminBiddingPage() {
 		}
 	};
 
-	const handleExportCSV = () => {
-		const exportData = biddingData.allBids.map((bid) => ({
-			Name: `${bid.firstName} ${bid.lastName}`,
-			Email: bid.email,
-			"Bid Amount": `$${bid.bidAmount}`,
-			Date: bid.bidDate ? new Date(bid.bidDate).toLocaleDateString() : "-",
-			Status: bid.status || "Pending",
-		}));
-		exportToCSV(exportData, "bidding-records");
-		toast.success("CSV exported successfully!");
-	};
-
+	
 	const handleExportChartImage = async (chartId, title) => {
 		setIsExporting(true);
 		await exportChartImage(chartId, title);
@@ -525,12 +513,7 @@ export default function AdminBiddingPage() {
 						>
 							<BiDownload /> PDF Report
 						</button>
-						<button
-							onClick={handleExportCSV}
-							className="px-4 py-2 bg-success text-white rounded-lg font-semibold hover:bg-success/90 transition flex items-center gap-2"
-						>
-							<BiDownload /> CSV Export
-						</button>
+						
 						<button
 							onClick={handleExportStats}
 							className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition flex items-center gap-2"
