@@ -15,7 +15,7 @@ export default function LoginPage(){
     const [isLoading , setIsLoading] = useState(false);
     const googleLogin = useGoogleLogin({
         onSuccess: (response) => {
-          //  console.log(response) you can see after login it provides access token and other details in the response({access_token: 'ya29.a0Aa7pC....)
+          
                 setIsLoading(true);
 			axios.post(import.meta.env.VITE_BACKEND_URL + "/users/google-login", {
 				token: response.access_token,
@@ -36,7 +36,7 @@ export default function LoginPage(){
             }, 
         onError: () => {toast.error("Google Login Failed");},
         onNonOAuthError: () => {toast.error("Non OAuth Error");},
-    }); //from this get google login function, click the button and see google login popup
+    }); 
 
     async function login(){
         console.log("login button click");
@@ -56,7 +56,7 @@ export default function LoginPage(){
         localStorage.setItem("token", res.data.token); 
         
 
-        // if login credentials == admin got to adminPage , if not go to normal homePage
+        
         if(res.data.role == "admin"){
             //window.location.href = "/admin";
             navigate("/admin")

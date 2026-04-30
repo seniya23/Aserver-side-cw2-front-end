@@ -17,7 +17,7 @@ export default function AdminPage(){
     const token = localStorage.getItem("token");
     const isAuthenticated = !!token;
 
-    useEffect(()=>{                                                //me reacthook eka use karanne page eka load weddi user ge data genna ganna
+    useEffect(()=>{                                               
         if(!isAuthenticated){
             toast.error("Please log in as admin.");
             navigate("/login");
@@ -27,7 +27,7 @@ export default function AdminPage(){
     return(
     
     <div  className="w-full h-full flex bg-accent">
-        {!isAuthenticated ? <Loader /> :  //sagalawarahan welin user wrap kerela thiyenne, if user data eka thiyenawanam(null nemenam) admin page eka display karanawa
+        {!isAuthenticated ? <Loader /> :  
         <>
         <div  className="w-[300px] h-full bg-accent">
             <div  className="w-full h-[100px] text-primary flex items-center">

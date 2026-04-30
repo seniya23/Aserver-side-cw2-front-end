@@ -25,5 +25,3 @@ export default function ImageSlider(props) {
     );
 }
 
-//object-cover use for css it  will cover the image container without distorting the image aspect ratio(loku image ekak, podi image ekak unath container eke width ekatay hight ekatay galepena widihata hadagannawa)
-//object-cover rounded-lg "+((activeIndex==index)?" border-2 border-accent": " " this means selecting object(activeIndex==index) need to cover from a border else (: " ") no border

@@ -5,18 +5,36 @@ import PlatformHeader from "../components/platformHeader";
 
 export default function AlumniProfilePage() {
 	const { email } = useParams();
+	const token = localStorage.getItem("token");
 	const [profile, setProfile] = useState(null);
+	const [posts, setPosts] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState("");
 
 	useEffect(() => {
 		if (!email) return;
-		axios
-			.get(`${import.meta.env.VITE_BACKEND_URL}/alumni/${email}`)
-			.then((res) => setProfile(res?.data?.massage || null))
-			.catch(() => setError("Unable to load alumni profile."))
+		const headers = token
+			? {
+					Authorization: `Bearer ${token}`,
+			  }
+			: {};
+
+		Promise.all([
+			axios.get(`${import.meta.env.VITE_BACKEND_URL}/alumni/${email}`, { headers }),
+			axios.get(`${import.meta.env.VITE_BACKEND_URL}/alumni/${email}/posts`, { headers }),
+		])
+			.then(([profileResponse, postsResponse]) => {
+				const profileData = profileResponse?.data?.massage || null;
+				setProfile(profileData);
+				if (Array.isArray(postsResponse?.data)) {
+					setPosts(postsResponse.data);
+				} else {
+					setPosts(postsResponse?.data?.posts || []);
+				}
+			})
+			.catch((err) => setError(err?.response?.data?.message || "Unable to load alumni profile."))
 			.finally(() => setIsLoading(false));
-	}, [email]);
+	}, [email, token]);
 
 	return (
 		<div className="min-h-screen bg-primary">
@@ -57,6 +75,25 @@ export default function AlumniProfilePage() {
 							<p className="font-semibold text-secondary">Biography</p>
 							<p className="text-secondary/80">{profile.biography || "-"}</p>
 						</div>
+					</div>
+				)}
+				{profile && (
+					<div className="bg-white rounded-xl p-6 mt-4 shadow">
+						<h2 className="text-xl font-semibold text-secondary mb-3">Posts by {profile.firstName}</h2>
+						{posts.length === 0 ? (
+							<p className="text-secondary/70">No posts yet.</p>
+						) : (
+							<div className="space-y-3">
+								{posts.map((post) => (
+									<div key={post.id} className="border border-secondary/20 rounded-lg p-4">
+										<p className="text-secondary whitespace-pre-line">{post.content}</p>
+										<p className="text-xs text-secondary/60 mt-2">
+											{post.createdAt ? new Date(post.createdAt).toLocaleString() : ""}
+										</p>
+									</div>
+								))}
+							</div>
+						)}
 					</div>
 				)}
 			</div>
