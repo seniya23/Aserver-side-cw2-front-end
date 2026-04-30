@@ -2,10 +2,6 @@ import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { LuBoxes, LuClipboardList } from "react-icons/lu";
 import { FiUsers } from "react-icons/fi";
 import { MdOutlineRateReview } from "react-icons/md";
-// import AdminProductPage from "./admin/adminProductsPage";
-// import AdminAddProductPage from "./admin/adminAddProductPage";
-// import AdminUpdateProductPage from "./admin/adminUpdateProductPage";
-// import AdminOrdersPage from "./admin/adminOrdersPage.jsx";
 import { useEffect } from "react";
 import Loader from "../components/loader.jsx";
 import AdminUsersPage from "./admin/adminUserPage.jsx";
@@ -56,15 +52,13 @@ export default function AdminPage(){
          depend on monitor size but using this method soleve that problem */}
         <div className="w-[calc(100%-300px)] bg-primary h-full max-h-full border-[10px] rounded-3xl border-accent overflow-y-scroll">
             <Routes>
-                {/* <Route path="/" element={<AdminOrdersPage/>}/>
-                <Route path="products" element={<AdminProductPage/>}/>
-                <Route path="add-product" element={<AdminAddProductPage/>}/> */}
+               
                 <Route path="analytics" element={<AdminAnalyticsPage/>}/>
                 <Route path="api-keys" element={<AdminApiKeysPage/>}/>
                 <Route path="bidding" element={<AdminBiddingPage/>}/>
                 <Route path="/" element={<AdminUsersPage/>}/>
                 <Route path="reviews" element={<h1>Reviews</h1>}/>
-                {/* <Route path="update-product" element={<AdminUpdateProductPage/>}/> */}
+                
             </Routes>
             
         </div>
