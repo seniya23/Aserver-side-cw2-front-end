@@ -86,8 +86,8 @@ export default function LoginPage(){
             {/* you can use object-cover if image looks like shrunk */}
             <img src="/logo.png" className="object-cover w-[200px] h-[200px] mb-[20px]" alt="logo" />
             <h1 className="text-[50px] text-gold text-shadow-accent text-shadow-2xs text-center
-             font-bold">Plug In. Power Up. Play Hard.</h1>
-            <p className="text-[30px] text-white italic ">Your Ultimate destination for gaming gear</p>
+             font-bold">PHANTASMAGORIA LTD ALUMNI PLATFORM</h1>
+            <p className="text-[30px] text-white italic ">Where Prestige Shine and Community Unites</p>
 
         </div>
         <div className="w-[50%] h-full flex justify-center items-center">

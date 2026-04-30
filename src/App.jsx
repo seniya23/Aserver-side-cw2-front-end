@@ -1,16 +1,17 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css'
-import Header from './components/header.jsx'
-//import { ProductCard } from './components/productCard.jsx'
-//import Test from './components/test..jsx';
 import HomePage from './pages/homePage.jsx';
 import LoginPage from './pages/loginPage';
 import RegisterPage from './pages/registerPage.jsx';
 import AdminPage from './pages/adminPage.jsx';
-//import TestPage from './pages/test.jsx';
 import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ForgetPasswordPage from './pages/forgetPasswordPage.jsx';
+import AlumniProfilePage from './pages/alumniProfilePage.jsx';
+import AlumniProfileFormPage from './pages/alumniProfileFormPage.jsx';
+import BiddingPage from './pages/biddingPage.jsx';
+import MyProfilePage from './pages/myProfilePage.jsx';
+import AdminAnalyticsPage from './pages/admin/adminAnalyticsPage.jsx';
 
 
 
@@ -29,12 +30,17 @@ function App() {
 
         <Routes>
 
-          <Route path="/*" element={<HomePage/>}/>
+          <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/register" element={<RegisterPage/>}/>
           <Route path="/admin/*" element={<AdminPage/>}/>
-          {/* <Route path="/test" element={<TestPage/>}/> */}
+          <Route path="/alumni/:email" element={<AlumniProfilePage/>}/>
+          <Route path="/my-profile" element={<MyProfilePage/>}/>
+          <Route path="/profile-form" element={<AlumniProfileFormPage/>}/>
+          <Route path="/bidding" element={<BiddingPage/>}/>
+          <Route path="/analytics" element={<AdminAnalyticsPage/>}/>
           <Route path="/forget-password" element={<ForgetPasswordPage/>}/>
+          <Route path="*" element={<HomePage/>}/>
           
         </Routes>
       </div>

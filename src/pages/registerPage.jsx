@@ -10,6 +10,7 @@ export default function RegisterPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+    const [role, setRole] = useState("user");
     const [isLoading , setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
@@ -51,6 +52,7 @@ export default function RegisterPage() {
 					password: password.trim(),
                     firstName: firstName.trim(),
                     lastName: lastName.trim(),
+                    role,
 				}
 			);
 			console.log();
@@ -103,6 +105,14 @@ export default function RegisterPage() {
                         placeholder="your last name"
                         className="w-full h-[50px] mb-[20px] rounded-lg border border-accent p-[10px] text-[20px] focus:outline-none focus:ring-2 focus:ring-gold"
                     />
+                    <select
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        className="w-full h-[50px] mb-[20px] rounded-lg border border-accent p-[10px] text-[20px] bg-white focus:outline-none focus:ring-2 focus:ring-gold"
+                    >
+                        <option value="user">User (Explore platform)</option>
+                        <option value="alumni">Alumni (Profile + bidding)</option>
+                    </select>
 					<input
 						onChange={(e) => {
 							setEmail(e.target.value);
