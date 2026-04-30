@@ -11,7 +11,7 @@ import AlumniProfilePage from './pages/alumniProfilePage.jsx';
 import AlumniProfileFormPage from './pages/alumniProfileFormPage.jsx';
 import BiddingPage from './pages/biddingPage.jsx';
 import MyProfilePage from './pages/myProfilePage.jsx';
-import AdminAnalyticsPage from './pages/admin/adminAnalyticsPage.jsx';
+import PublicAnalyticsPage from './pages/publicAnalyticsPage.jsx';
 
 
 
@@ -38,7 +38,7 @@ function App() {
           <Route path="/my-profile" element={<MyProfilePage/>}/>
           <Route path="/profile-form" element={<AlumniProfileFormPage/>}/>
           <Route path="/bidding" element={<BiddingPage/>}/>
-          <Route path="/analytics" element={<AdminAnalyticsPage/>}/>
+          <Route path="/analytics" element={<PublicAnalyticsPage/>}/>
           <Route path="/forget-password" element={<ForgetPasswordPage/>}/>
           <Route path="*" element={<HomePage/>}/>
           
