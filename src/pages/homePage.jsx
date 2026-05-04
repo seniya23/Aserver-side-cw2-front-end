@@ -5,6 +5,19 @@ import PlatformHeader from "../components/platformHeader";
 import { getCurrentUser } from "../utils/auth";
 import toast from "react-hot-toast";
 
+function resolveImageUrl(...candidates) {
+	for (const value of candidates) {
+		if (typeof value !== "string") continue;
+		const trimmed = value.trim();
+		if (!trimmed) continue;
+		if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("/")) {
+			return trimmed;
+		}
+		return `${import.meta.env.VITE_BACKEND_URL}/${trimmed}`;
+	}
+	return "/default.jpg";
+}
+
 export default function HomePage() {
 	const user = getCurrentUser();
 	const token = localStorage.getItem("token");
@@ -61,13 +74,22 @@ export default function HomePage() {
 		const safeHomePosts = Array.isArray(homePosts) ? homePosts : [];
 
 		if (winnerProfile) {
+			const winnerPostMatch = safeHomePosts.find(
+				(post) => post?.alumniEmail && post.alumniEmail === winnerProfile.email
+			);
 			posts.unshift({
 				id: "winner",
 				title: "Alumni of the Day",
 				content:
 					"The Winner of Today's Bidding programme, congratulations to our active alumni! Check out their profile and connect with them.",
 				email: winnerProfile.email,
-				image: winnerProfile.image,
+				image: resolveImageUrl(
+					winnerPostMatch?.image,
+					winnerPostMatch?.profileImage,
+					winnerProfile.profileImage,
+					winnerProfile.winnerImage,
+					winnerProfile.image
+				),
 				name: `${winnerProfile.firstName} ${winnerProfile.lastName}`,
 			});
 		}
@@ -78,7 +100,7 @@ export default function HomePage() {
 				title: "Alumni Post",
 				content: post.content,
 				email: post.alumniEmail,
-				image: post.image,
+				image: post.image || post.profileImage || "/logo.png",
 				name: `${post.firstName || ""} ${post.lastName || ""}`.trim(),
 				createdAt: post.createdAt,
 			});
@@ -145,9 +167,12 @@ export default function HomePage() {
 						<div key={post.id} className="bg-white rounded-xl p-5 shadow">
 							<div className="flex gap-4 items-start">
 								<img
-									src={post.image || "/logo.png"}
+									src={post.image || (post.id === "winner" ? "/default.jpg" : "/logo.png")}
 									alt={post.title}
 									className="w-14 h-14 rounded-full object-cover"
+									onError={(e) => {
+										e.currentTarget.src = post.id === "winner" ? "/default.jpg" : "/logo.png";
+									}}
 								/>
 								<div className="flex-1">
 									<h2 className="text-xl font-semibold text-secondary">{post.title}</h2>

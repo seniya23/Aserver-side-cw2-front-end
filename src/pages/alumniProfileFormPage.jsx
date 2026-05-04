@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import PlatformHeader from "../components/platformHeader";
 import { getCurrentUser } from "../utils/auth";
 
@@ -20,6 +20,7 @@ const initialForm = {
 };
 
 export default function AlumniProfileFormPage() {
+	const navigate = useNavigate();
 	const user = getCurrentUser();
 	const token = localStorage.getItem("token");
 	const [formData, setFormData] = useState(initialForm);
@@ -76,8 +77,9 @@ export default function AlumniProfileFormPage() {
 				await axios.post(`${import.meta.env.VITE_BACKEND_URL}/alumni`, formData, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
-				setHasExistingProfile(true);
-				toast.success("Profile created successfully");
+				toast.success("Profile created successfully. Please sign in again.");
+				localStorage.removeItem("token");
+				navigate("/login", { replace: true });
 			}
 		} catch (error) {
 			toast.error(error?.response?.data?.message || "Failed to save profile");
