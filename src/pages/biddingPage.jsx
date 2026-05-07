@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Navigate } from "react-router-dom";
 import PlatformHeader from "../components/platformHeader";
 import { getCurrentUser } from "../utils/auth";
+import Loader from "../components/loader";
 
 export default function BiddingPage() {
 	const user = getCurrentUser();
@@ -72,6 +73,7 @@ export default function BiddingPage() {
 	return (
 		<div className="min-h-screen bg-primary">
 			<PlatformHeader />
+			{isLoading && <Loader />}
 			<div className="max-w-4xl mx-auto p-6">
 				<h1 className="text-2xl font-bold text-secondary">Blind Bidding Program</h1>
 				<p className="text-secondary/70 mb-4">
@@ -109,7 +111,6 @@ export default function BiddingPage() {
 							Increase Existing Bid
 						</button>
 					</div>
-					{isLoading && <p className="text-sm mt-3 text-secondary/70">Loading...</p>}
 				</div>
 			</div>
 		</div>

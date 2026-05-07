@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PlatformHeader from "../components/platformHeader";
+import Loader from "../components/loader";
 
 export default function AlumniProfilePage() {
 	const { email } = useParams();
@@ -43,7 +44,7 @@ export default function AlumniProfilePage() {
 				<Link to="/" className="text-accent text-sm">
 					Back to home
 				</Link>
-				{isLoading && <div className="bg-white rounded-xl p-6 mt-3">Loading profile...</div>}
+				{isLoading && <Loader />}
 				{error && <div className="bg-red-100 text-red-700 rounded-xl p-6 mt-3">{error}</div>}
 				{profile && (
 					<div className="bg-white rounded-xl p-6 mt-3 shadow">

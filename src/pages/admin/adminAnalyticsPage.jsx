@@ -522,9 +522,7 @@ export default function AdminAnalyticsPage() {
 				{/* Header */}
 				<div className="mb-12">
 					<h1 className="text-4xl font-bold text-secondary mb-2">Analytics Dashboard</h1>
-					<p className="text-secondary/60 mb-6">
-						Comprehensive alumni analytics and insights with interactive visualizations
-					</p>
+					
 
 					{/* Export & Preset Buttons */}
 					<div className="flex flex-wrap gap-3 mb-6">
@@ -649,13 +647,13 @@ export default function AdminAnalyticsPage() {
 					<StatCard
 						title="Certifications"
 						value={insights.totalCertifications}
-						icon="🎓"
+						icon="📚"
 						trend="Professional credentials"
 					/>
 					<StatCard
 						title="Degrees"
 						value={insights.totalDegrees}
-						icon="📚"
+						icon="🎓"
 						trend="Academic qualifications"
 					/>
 				</div>

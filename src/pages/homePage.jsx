@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import PlatformHeader from "../components/platformHeader";
 import { getCurrentUser } from "../utils/auth";
 import toast from "react-hot-toast";
+import Loader from "../components/loader";
 
 function resolveImageUrl(...candidates) {
 	for (const value of candidates) {
@@ -161,7 +162,7 @@ export default function HomePage() {
 				{feedError && <div className="bg-red-100 text-red-700 rounded-xl p-4">{feedError}</div>}
 
 				{isLoading ? (
-					<div className="bg-white rounded-xl p-6 shadow">Loading home feed...</div>
+					<Loader />
 				) : (
 					feedPosts.map((post) => (
 						<div key={post.id} className="bg-white rounded-xl p-5 shadow">

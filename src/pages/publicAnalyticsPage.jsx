@@ -12,6 +12,7 @@ import {
 	Legend,
 } from "chart.js";
 import PlatformHeader from "../components/platformHeader";
+import Loader from "../components/loader";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
@@ -109,7 +110,7 @@ export default function PublicAnalyticsPage() {
 				</p>
 
 				{isLoading ? (
-					<div className="bg-white rounded-xl p-6 shadow">Loading analytics...</div>
+					<Loader />
 				) : (
 					<>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

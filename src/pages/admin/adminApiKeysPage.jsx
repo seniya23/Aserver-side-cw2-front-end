@@ -176,7 +176,6 @@ export default function AdminApiKeysPage() {
 					<div className="mb-8 flex justify-between items-center">
 						<div>
 							<h1 className="text-3xl font-bold text-secondary mb-2">API Keys Management</h1>
-							<p className="text-secondary/60">Create and manage scoped API keys for your applications</p>
 						</div>
 						<button
 							onClick={() => setShowCreateModal(true)}

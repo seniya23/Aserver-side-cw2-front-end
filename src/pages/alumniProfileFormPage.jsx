@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Navigate, useNavigate } from "react-router-dom";
 import PlatformHeader from "../components/platformHeader";
 import { getCurrentUser } from "../utils/auth";
+import Loader from "../components/loader";
 
 const initialForm = {
 	image: "",
@@ -29,6 +30,7 @@ export default function AlumniProfileFormPage() {
 
 	useEffect(() => {
 		if (!user?.email || !token) return;
+		setIsLoading(true);
 		axios
 			.get(`${import.meta.env.VITE_BACKEND_URL}/alumni/${user.email}`, {
 				headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +54,8 @@ export default function AlumniProfileFormPage() {
 					});
 				}
 			})
-			.catch(() => setHasExistingProfile(false));
+			.catch(() => setHasExistingProfile(false))
+			.finally(() => setIsLoading(false));
 	}, [token, user?.email]);
 
 	if (!user?.email || !token) {
@@ -91,6 +94,7 @@ export default function AlumniProfileFormPage() {
 	return (
 		<div className="min-h-screen bg-primary">
 			<PlatformHeader />
+			{isLoading && <Loader />}
 			<div className="max-w-3xl mx-auto p-6">
 				<h1 className="text-2xl font-bold text-secondary mb-4">
 					{hasExistingProfile ? "Update Alumni Profile" : "Create Alumni Profile"}

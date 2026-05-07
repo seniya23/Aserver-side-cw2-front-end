@@ -500,9 +500,7 @@ export default function AdminBiddingPage() {
 				{/* Header */}
 				<div className="mb-12">
 					<h1 className="text-4xl font-bold text-secondary mb-2">Bidding Management Dashboard</h1>
-					<p className="text-secondary/60 mb-6">
-						Monitor and analyze bidding activity with comprehensive analytics
-					</p>
+					
 
 					{/* Export & Preset Buttons */}
 					<div className="flex flex-wrap gap-3 mb-6">
