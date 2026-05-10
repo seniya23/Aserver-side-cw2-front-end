@@ -40,26 +40,26 @@ export default function AlumniProfilePage() {
 	return (
 		<div className="min-h-screen bg-primary">
 			<PlatformHeader />
-			<div className="max-w-3xl mx-auto p-6">
+			<div className="max-w-3xl mx-auto p-3 sm:p-6">
 				<Link to="/" className="text-accent text-sm">
 					Back to home
 				</Link>
 				{isLoading && <Loader />}
 				{error && <div className="bg-red-100 text-red-700 rounded-xl p-6 mt-3">{error}</div>}
 				{profile && (
-					<div className="bg-white rounded-xl p-6 mt-3 shadow">
-						<div className="flex items-start gap-4">
+					<div className="bg-white rounded-xl p-4 sm:p-6 mt-3 shadow">
+						<div className="flex flex-col sm:flex-row items-start gap-4">
 							<img
 								src={profile.image || "/logo.png"}
 								alt={profile.firstName}
-								className="w-24 h-24 rounded-full object-cover"
+								className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover"
 							/>
 							<div>
-								<h1 className="text-2xl font-bold text-secondary">
+								<h1 className="text-xl sm:text-2xl font-bold text-secondary">
 									{profile.firstName} {profile.lastName}
 								</h1>
-								<p className="text-secondary/80">{profile.email}</p>
-								<p className="text-accent font-semibold">
+								<p className="text-sm sm:text-base text-secondary/80 break-all">{profile.email}</p>
+								<p className="text-sm sm:text-base text-accent font-semibold">
 									Profile Completion: {profile.profileCompletionPercentage || 0}%
 								</p>
 							</div>
@@ -79,8 +79,8 @@ export default function AlumniProfilePage() {
 					</div>
 				)}
 				{profile && (
-					<div className="bg-white rounded-xl p-6 mt-4 shadow">
-						<h2 className="text-xl font-semibold text-secondary mb-3">Posts by {profile.firstName}</h2>
+					<div className="bg-white rounded-xl p-4 sm:p-6 mt-4 shadow">
+						<h2 className="text-lg sm:text-xl font-semibold text-secondary mb-3">Posts by {profile.firstName}</h2>
 						{posts.length === 0 ? (
 							<p className="text-secondary/70">No posts yet.</p>
 						) : (

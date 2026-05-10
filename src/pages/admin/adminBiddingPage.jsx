@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BiRefresh, BiPlus, BiTrash } from "react-icons/bi";
+import { BiRefresh, BiTrash } from "react-icons/bi";
 import Loader from "../../components/loader";
 import toast from "react-hot-toast";
 import { Bar, Line, Pie, Doughnut } from "react-chartjs-2";
@@ -19,14 +19,10 @@ import {
 import {
 	exportChartImage,
 	generatePDFReport,
-	saveFilterPreset,
-	loadFilterPreset,
-	getAllFilterPresets,
-	deleteFilterPreset,
-	exportStatsToJSON,
 } from "../../utils/exportUtils";
 import { BiDownload } from "react-icons/bi";
-import { FiSave } from "react-icons/fi";
+import DashboardStatCard from "../../components/dashboardStatCard";
+import DashboardChartCard from "../../components/dashboardChartCard";
 
 ChartJS.register(
 	CategoryScale,
@@ -51,9 +47,6 @@ export default function AdminBiddingPage() {
 	const [apiKey, setApiKey] = useState("");
 	const [showApiKeyInput, setShowApiKeyInput] = useState(false);
 	const [filter, setFilter] = useState("all");
-	const [showPresetModal, setShowPresetModal] = useState(false);
-	const [presetName, setPresetName] = useState("");
-	const [savedPresets, setSavedPresets] = useState([]);
 	const [isExporting, setIsExporting] = useState(false);
 
 	const apiBase = import.meta.env.VITE_BACKEND_URL;
@@ -120,8 +113,6 @@ export default function AdminBiddingPage() {
 		} else {
 			setShowApiKeyInput(true);
 		}
-		// Load saved presets
-		setSavedPresets(getAllFilterPresets());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -133,36 +124,6 @@ export default function AdminBiddingPage() {
 		}
 	};
 
-	// Export functions
-	const handleSavePreset = () => {
-		if (!presetName.trim()) {
-			toast.error("Preset name is required");
-			return;
-		}
-		saveFilterPreset(presetName, { filter });
-		toast.success(`Preset '${presetName}' saved!`);
-		setPresetName("");
-		setShowPresetModal(false);
-		setSavedPresets(getAllFilterPresets());
-	};
-
-	const handleLoadPreset = (name) => {
-		const preset = loadFilterPreset(name);
-		if (preset && preset.filter) {
-			setFilter(preset.filter);
-			toast.success(`Preset '${name}' loaded!`);
-		}
-	};
-
-	const handleDeletePreset = (name) => {
-		if (confirm(`Delete preset '${name}'?`)) {
-			deleteFilterPreset(name);
-			toast.success("Preset deleted!");
-			setSavedPresets(getAllFilterPresets());
-		}
-	};
-
-	
 	const handleExportChartImage = async (chartId, title) => {
 		setIsExporting(true);
 		await exportChartImage(chartId, title);
@@ -244,11 +205,33 @@ export default function AdminBiddingPage() {
 		setIsExporting(false);
 	};
 
-	const handleExportStats = () => {
-		const stats = calculateInsights();
-		exportStatsToJSON(stats, "bidding-statistics");
-		toast.success("Statistics exported as JSON!");
-	};
+	async function deleteBidById(bid) {
+		if (!apiKey) {
+			toast.error("API key is required");
+			setShowApiKeyInput(true);
+			return;
+		}
+
+		if (!confirm(`Delete bid #${bid.id} by ${bid.firstName} ${bid.lastName}?`)) {
+			return;
+		}
+
+		try {
+			const headers = {
+				[apiKeyHeader]: apiKey,
+				Authorization: `Bearer ${token}`,
+			};
+			await axios.delete(`${apiBase}/bidding/admin/${bid.id}`, { headers });
+			toast.success("Bid deleted successfully");
+			loadBiddingData(apiKey);
+		} catch (error) {
+			if (error.response?.status === 403) {
+				toast.error("Your API key must have write:bidding permission to delete bids.");
+				return;
+			}
+			toast.error(error.response?.data?.message || "Failed to delete bid");
+		}
+	}
 
 	// Chart color schemes
 	const colors = {
@@ -407,44 +390,6 @@ export default function AdminBiddingPage() {
 		],
 	};
 
-	const StatCard = ({ title, value, icon, trend, color }) => (
-		<div
-			className={`bg-white/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 ${
-				color || "border-secondary/10"
-			}`}
-		>
-			<div className="flex justify-between items-start mb-3">
-				<p className="text-secondary/60 text-sm uppercase tracking-wide font-semibold">
-					{title}
-				</p>
-				{icon && <span className="text-2xl">{icon}</span>}
-			</div>
-			<p className="text-3xl font-bold text-secondary mb-2">{value}</p>
-			{trend && <p className="text-xs text-secondary/60">{trend}</p>}
-		</div>
-	);
-
-	const ChartContainer = ({ title, chartId, children }) => (
-		<div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-secondary/10">
-			<div className="flex justify-between items-center mb-6">
-				<h3 className="text-xl font-bold text-secondary">{title}</h3>
-				{chartId && (
-					<button
-						onClick={() => handleExportChartImage(chartId, title.replace(/[^a-zA-Z0-9]/g, "-"))}
-						disabled={isExporting}
-						className="p-2 text-accent hover:text-accent/80 transition disabled:opacity-50"
-						title="Export chart as PNG"
-					>
-						<BiDownload size={18} />
-					</button>
-				)}
-			</div>
-			<div className="h-80" id={chartId}>
-				{children}
-			</div>
-		</div>
-	);
-
 	if (showApiKeyInput && !isLoading) {
 		return (
 			<div className="w-full min-h-screen p-10 bg-linear-to-b from-primary to-white">
@@ -511,84 +456,7 @@ export default function AdminBiddingPage() {
 						>
 							<BiDownload /> PDF Report
 						</button>
-						
-						<button
-							onClick={handleExportStats}
-							className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition flex items-center gap-2"
-						>
-							<BiDownload /> JSON Stats
-						</button>
-						<button
-							onClick={() => setShowPresetModal(true)}
-							className="px-4 py-2 bg-warning text-white rounded-lg font-semibold hover:bg-warning/90 transition flex items-center gap-2"
-						>
-							<FiSave /> Save Preset
-						</button>
 					</div>
-
-					{/* Preset Modal */}
-					{showPresetModal && (
-						<div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-							<div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-								<h2 className="text-2xl font-bold text-secondary mb-4">Save Filter Preset</h2>
-								<div className="mb-4">
-									<label className="block text-secondary font-semibold mb-2">Preset Name</label>
-									<input
-										type="text"
-										value={presetName}
-										onChange={(e) => setPresetName(e.target.value)}
-										placeholder="e.g., Active Bids Report"
-										className="w-full px-4 py-2 border border-secondary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-									/>
-								</div>
-								<div className="flex gap-3">
-									<button
-										onClick={() => {
-											setShowPresetModal(false);
-											setPresetName("");
-										}}
-										className="flex-1 px-4 py-2 border border-secondary/20 text-secondary rounded-lg hover:bg-secondary/5 transition"
-									>
-										Cancel
-									</button>
-									<button
-										onClick={handleSavePreset}
-										className="flex-1 px-4 py-2 bg-accent text-primary rounded-lg font-semibold hover:bg-accent/90 transition"
-									>
-										Save
-									</button>
-								</div>
-							</div>
-						</div>
-					)}
-
-					{/* Saved Presets */}
-					{savedPresets.length > 0 && (
-						<div className="mb-6 p-4 bg-white/70 rounded-xl border border-secondary/10">
-							<h3 className="text-sm font-bold text-secondary mb-3">Saved Presets</h3>
-							<div className="flex flex-wrap gap-2">
-								{savedPresets.map((preset) => (
-									<div
-										key={preset}
-										className="flex items-center gap-2 px-3 py-1 bg-secondary/10 rounded-full text-sm"
-									>
-										<button
-											onClick={() => handleLoadPreset(preset)}
-											className="text-secondary hover:text-accent transition font-medium"
-										>
-											📌 {preset}
-										</button>
-										<button
-											onClick={() => handleDeletePreset(preset)}
-											className="text-red-500 hover:text-red-700 transition"
-										>
-											<BiTrash size={14} />
-										</button>
-									</div>
-								))}
-							</div>
-						</div>
-					)}
 
 					<div className="flex gap-4">
 						<button
@@ -612,40 +480,40 @@ export default function AdminBiddingPage() {
 
 				{/* Key Metrics Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
-					<StatCard
+					<DashboardStatCard
 						title="Total Bids"
 						value={insights.totalBids}
 						icon="💰"
 						trend="All bids placed"
-						color="border-primary"
+						colorClass="border-primary"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Active Bids"
 						value={insights.activeBids}
 						icon="🔴"
 						trend="Currently active"
-						color="border-warning"
+						colorClass="border-warning"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Winners"
 						value={insights.totalWinners}
 						icon="🏆"
 						trend="Successful bids"
-						color="border-success"
+						colorClass="border-success"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Avg Bid ($)"
 						value={`$${insights.avgBidAmount}`}
 						icon="📊"
 						trend="Average bid amount"
-						color="border-accent"
+						colorClass="border-accent"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Highest Bid ($)"
 						value={`$${insights.highestBid}`}
 						icon="⭐"
 						trend="Maximum bid placed"
-						color="border-danger"
+						colorClass="border-danger"
 					/>
 				</div>
 
@@ -653,14 +521,14 @@ export default function AdminBiddingPage() {
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
 					{/* Chart 1: Bid Status Distribution */}
 					{biddingData.allBids.length > 0 && (
-					<ChartContainer title="1. Bid Status Distribution (Pie Chart)" chartId="bid-status-chart">
+					<DashboardChartCard title="1. Bid Status Distribution (Pie Chart)" chartId="bid-status-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Pie data={bidStatusData} options={chartOptions} />
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 2: Bid Amount Trend */}
 					{biddingData.allBids.length > 0 && (
-					<ChartContainer title="2. Bid Amount Trend (Line Chart)" chartId="bid-amount-chart">
+					<DashboardChartCard title="2. Bid Amount Trend (Line Chart)" chartId="bid-amount-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Line
 								data={bidAmountData}
 								options={{
@@ -678,12 +546,12 @@ export default function AdminBiddingPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 3: Top Bidders */}
 					{topBidders.length > 0 && (
-					<ChartContainer title="3. Top 8 Bidders (Bar Chart)" chartId="top-bidders-chart">
+					<DashboardChartCard title="3. Top 8 Bidders (Bar Chart)" chartId="top-bidders-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={topBiddersData}
 								options={{
@@ -702,12 +570,12 @@ export default function AdminBiddingPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 4: Monthly Bid Trend */}
 					{biddingData.allBids.length > 0 && (
-					<ChartContainer title="4. Monthly Bidding Trend (Line Chart)" chartId="monthly-trend-chart">
+					<DashboardChartCard title="4. Monthly Bidding Trend (Line Chart)" chartId="monthly-trend-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Line
 								data={monthlyBidData}
 								options={{
@@ -725,7 +593,7 @@ export default function AdminBiddingPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 				</div>
 
@@ -787,7 +655,7 @@ export default function AdminBiddingPage() {
 										Status
 									</th>
 									<th className="px-6 py-4 text-left text-xs font-semibold uppercase">
-										Action
+										Actions
 									</th>
 								</tr>
 							</thead>
@@ -831,9 +699,11 @@ export default function AdminBiddingPage() {
 											</td>
 											<td className="px-6 py-4 text-sm">
 												<button
-													className="px-3 py-1 text-xs bg-primary text-white rounded hover:bg-primary/80 transition"
+													onClick={() => deleteBidById(bid)}
+													className="px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition flex items-center gap-1"
 												>
-													View
+													<BiTrash />
+													Delete
 												</button>
 											</td>
 										</tr>

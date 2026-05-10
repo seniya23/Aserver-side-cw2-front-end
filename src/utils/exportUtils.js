@@ -4,20 +4,6 @@ import Papa from "papaparse";
 import { format } from "date-fns";
 
 /**
- * Export data to CSV format
- * @param {Array} data - Array of objects to export
- * @param {String} filename - Output filename (without extension)
- */
-export function exportToCSV(data, filename = "export") {
-	const csv = Papa.unparse(data);
-	const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-	const link = document.createElement("a");
-	link.href = URL.createObjectURL(blob);
-	link.download = `${filename}_${format(new Date(), "yyyy-MM-dd_HHmm")}.csv`;
-	link.click();
-}
-
-/**
  * Export chart to PNG image
  * @param {String} chartElementId - ID of chart container
  * @param {String} filename - Output filename (without extension)
@@ -223,59 +209,3 @@ export function removeTemporaryTable(table) {
 	}
 }
 
-/**
- * Save filter preset to localStorage
- * @param {String} presetName - Name of the preset
- * @param {Object} filters - Filter object to save
- */
-export function saveFilterPreset(presetName, filters) {
-	const presets = JSON.parse(localStorage.getItem("filterPresets") || "{}");
-	presets[presetName] = {
-		...filters,
-		savedAt: new Date().toISOString(),
-	};
-	localStorage.setItem("filterPresets", JSON.stringify(presets));
-}
-
-/**
- * Load filter preset from localStorage
- * @param {String} presetName - Name of the preset
- * @returns {Object} Filter object
- */
-export function loadFilterPreset(presetName) {
-	const presets = JSON.parse(localStorage.getItem("filterPresets") || "{}");
-	return presets[presetName] || null;
-}
-
-/**
- * Get all saved filter presets
- * @returns {Array} Array of preset names
- */
-export function getAllFilterPresets() {
-	const presets = JSON.parse(localStorage.getItem("filterPresets") || "{}");
-	return Object.keys(presets);
-}
-
-/**
- * Delete filter preset
- * @param {String} presetName - Name of the preset to delete
- */
-export function deleteFilterPreset(presetName) {
-	const presets = JSON.parse(localStorage.getItem("filterPresets") || "{}");
-	delete presets[presetName];
-	localStorage.setItem("filterPresets", JSON.stringify(presets));
-}
-
-/**
- * Export summary statistics to JSON
- * @param {Object} stats - Statistics object
- * @param {String} filename - Output filename
- */
-export function exportStatsToJSON(stats, filename = "statistics") {
-	const json = JSON.stringify(stats, null, 2);
-	const blob = new Blob([json], { type: "application/json;charset=utf-8;" });
-	const link = document.createElement("a");
-	link.href = URL.createObjectURL(blob);
-	link.download = `${filename}_${format(new Date(), "yyyy-MM-dd_HHmm")}.json`;
-	link.click();
-}

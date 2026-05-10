@@ -11,6 +11,8 @@ import AdminAnalyticsPage from "./admin/adminAnalyticsPage.jsx";
 import AdminApiKeysPage from "./admin/adminApiKeysPage.jsx";
 import AdminBiddingPage from "./admin/adminBiddingPage.jsx";
 import { BsCash } from "react-icons/bs";
+import { FaTrophy } from "react-icons/fa";
+import AdminAlumniOfDayPage from "./admin/adminAlumniOfDayPage.jsx";
 
 export default function AdminPage(){
     const navigate = useNavigate();
@@ -42,6 +44,7 @@ export default function AdminPage(){
                 <Link to="/admin/analytics" className="w-full flex items-center h-[50px] gap-[10px]"><BiAnalyse/>Analytics</Link>
                 <Link to="/admin/api-keys" className="w-full flex items-center h-[50px] gap-[10px]"><BiKey/>Api Keys</Link>
                 <Link to="/admin/bidding" className="w-full flex items-center h-[50px] gap-[10px]"><BsCash/>Bidding</Link>
+                <Link to="/admin/alumni-of-the-day" className="w-full flex items-center h-[50px] gap-[10px]"><FaTrophy/>Alumni of Day</Link>
                 
             </div>
 
@@ -56,6 +59,7 @@ export default function AdminPage(){
                 <Route path="analytics" element={<AdminAnalyticsPage/>}/>
                 <Route path="api-keys" element={<AdminApiKeysPage/>}/>
                 <Route path="bidding" element={<AdminBiddingPage/>}/>
+                <Route path="alumni-of-the-day" element={<AdminAlumniOfDayPage/>}/>
                 <Route path="/" element={<AdminUsersPage/>}/>
                 <Route path="reviews" element={<h1>Reviews</h1>}/>
                 

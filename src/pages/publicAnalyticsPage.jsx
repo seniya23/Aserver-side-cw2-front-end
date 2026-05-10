@@ -13,6 +13,8 @@ import {
 } from "chart.js";
 import PlatformHeader from "../components/platformHeader";
 import Loader from "../components/loader";
+import DashboardStatCard from "../components/dashboardStatCard";
+import DashboardChartCard from "../components/dashboardChartCard";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
@@ -103,9 +105,9 @@ export default function PublicAnalyticsPage() {
 	return (
 		<div className="min-h-screen bg-linear-to-b from-primary to-white">
 			<PlatformHeader />
-			<div className="max-w-7xl mx-auto p-6">
-				<h1 className="text-3xl font-bold text-secondary">Public Alumni Analytics</h1>
-				<p className="text-secondary/70 mb-6">
+			<div className="max-w-7xl mx-auto p-3 sm:p-6">
+				<h1 className="text-2xl sm:text-3xl font-bold text-secondary">Public Alumni Analytics</h1>
+				<p className="text-sm sm:text-base text-secondary/70 mb-6">
 					Accessible for users and alumni without API key scoping.
 				</p>
 
@@ -114,56 +116,37 @@ export default function PublicAnalyticsPage() {
 				) : (
 					<>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-							<StatCard
+							<DashboardStatCard
 								title="Top Industry"
 								value={topIndustry?.industry || "-"}
-								note={`${topIndustry?.count || 0} alumni`}
+								trend={`${topIndustry?.count || 0} alumni`}
 							/>
-							<StatCard
+							<DashboardStatCard
 								title="Top Certifications"
 								value={certifications?.[0]?.certification || "-"}
-								note={`${certifications?.[0]?.count || 0} alumni`}
+								trend={`${certifications?.[0]?.count || 0} alumni`}
 							/>
-							<StatCard
+							<DashboardStatCard
 								title="Top Degree"
 								value={degrees?.[0]?.degree || "-"}
-								note={`${degrees?.[0]?.count || 0} alumni`}
+								trend={`${degrees?.[0]?.count || 0} alumni`}
 							/>
 						</div>
 
-						<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-							<ChartCard title="Industry Distribution">
+						<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+							<DashboardChartCard title="Industry Distribution">
 								<Bar data={industryChart} />
-							</ChartCard>
-							<ChartCard title="Top Certifications">
+							</DashboardChartCard>
+							<DashboardChartCard title="Top Certifications">
 								<Pie data={certsChart} />
-							</ChartCard>
-							<ChartCard title="Degree Distribution">
+							</DashboardChartCard>
+							<DashboardChartCard title="Degree Distribution">
 								<Doughnut data={degreeChart} />
-							</ChartCard>
+							</DashboardChartCard>
 						</div>
 					</>
 				)}
 			</div>
-		</div>
-	);
-}
-
-function StatCard({ title, value, note }) {
-	return (
-		<div className="bg-white rounded-xl p-5 shadow">
-			<p className="text-sm text-secondary/60">{title}</p>
-			<p className="text-xl font-bold text-secondary">{value}</p>
-			<p className="text-sm text-secondary/70">{note}</p>
-		</div>
-	);
-}
-
-function ChartCard({ title, children }) {
-	return (
-		<div className="bg-white rounded-xl p-5 shadow min-h-[320px]">
-			<h2 className="text-lg font-semibold text-secondary mb-4">{title}</h2>
-			<div className="h-[260px]">{children}</div>
 		</div>
 	);
 }

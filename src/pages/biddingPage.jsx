@@ -74,13 +74,11 @@ export default function BiddingPage() {
 		<div className="min-h-screen bg-primary">
 			<PlatformHeader />
 			{isLoading && <Loader />}
-			<div className="max-w-4xl mx-auto p-6">
-				<h1 className="text-2xl font-bold text-secondary">Blind Bidding Program</h1>
-				<p className="text-secondary/70 mb-4">
-					You cannot see highest bids. Increase-only updates are supported. Monthly win limit: 3.
-				</p>
+			<div className="max-w-4xl mx-auto p-3 sm:p-6">
+				<h1 className="text-xl sm:text-2xl font-bold text-secondary">Blind Bidding Program</h1>
+				
 
-				<div className="bg-white rounded-xl p-6 shadow mb-4">
+				<div className="bg-white rounded-xl p-4 sm:p-6 shadow mb-4">
 					<p className="text-secondary">
 						Current Active Bid:{" "}
 						<span className="font-semibold">
@@ -91,7 +89,7 @@ export default function BiddingPage() {
 					<p className="text-secondary">Remaining Slots: {data?.remainingSlots ?? 3}</p>
 				</div>
 
-				<div className="bg-white rounded-xl p-6 shadow">
+				<div className="bg-white rounded-xl p-4 sm:p-6 shadow">
 					<input
 						type="number"
 						min="1"
@@ -100,13 +98,13 @@ export default function BiddingPage() {
 						onChange={(e) => setBidAmount(e.target.value)}
 						className="w-full border border-secondary/30 rounded-md p-2 mb-3"
 					/>
-					<div className="flex gap-3">
-						<button onClick={placeBid} className="px-4 py-2 bg-accent text-primary rounded-md font-semibold">
+					<div className="flex flex-col sm:flex-row gap-3">
+						<button onClick={placeBid} className="w-full sm:w-auto px-4 py-2 bg-accent text-primary rounded-md font-semibold">
 							Place Bid
 						</button>
 						<button
 							onClick={updateBid}
-							className="px-4 py-2 bg-secondary text-white rounded-md font-semibold"
+							className="w-full sm:w-auto px-4 py-2 bg-secondary text-white rounded-md font-semibold"
 						>
 							Increase Existing Bid
 						</button>

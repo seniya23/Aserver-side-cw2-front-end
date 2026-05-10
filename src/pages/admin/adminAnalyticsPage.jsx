@@ -19,14 +19,10 @@ import { Bar, Line, Pie, Doughnut, Radar } from "react-chartjs-2";
 import {
 	exportChartImage,
 	generatePDFReport,
-	saveFilterPreset,
-	loadFilterPreset,
-	getAllFilterPresets,
-	deleteFilterPreset,
-	exportStatsToJSON,
 } from "../../utils/exportUtils";
-import { BiDownload, BiTrash } from "react-icons/bi";
-import { FiSave } from "react-icons/fi";
+import { BiDownload } from "react-icons/bi";
+import DashboardStatCard from "../../components/dashboardStatCard";
+import DashboardChartCard from "../../components/dashboardChartCard";
 
 ChartJS.register(
 	CategoryScale,
@@ -54,9 +50,6 @@ export default function AdminAnalyticsPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [apiKey, setApiKey] = useState("");
 	const [showApiKeyInput, setShowApiKeyInput] = useState(false);
-	const [showPresetModal, setShowPresetModal] = useState(false);
-	const [presetName, setPresetName] = useState("");
-	const [savedPresets, setSavedPresets] = useState([]);
 	const [isExporting, setIsExporting] = useState(false);
 
 	const apiBase = import.meta.env.VITE_BACKEND_URL;
@@ -126,8 +119,6 @@ export default function AdminAnalyticsPage() {
 		} else {
 			setShowApiKeyInput(true);
 		}
-		// Load saved presets
-		setSavedPresets(getAllFilterPresets());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -139,37 +130,6 @@ export default function AdminAnalyticsPage() {
 		}
 	};
 
-	// Export functions
-	const handleSavePreset = () => {
-		if (!presetName.trim()) {
-			toast.error("Preset name is required");
-			return;
-		}
-		saveFilterPreset(presetName, {
-			timestamp: new Date().toISOString(),
-		});
-		toast.success(`Preset '${presetName}' saved!`);
-		setPresetName("");
-		setShowPresetModal(false);
-		setSavedPresets(getAllFilterPresets());
-	};
-
-	const handleLoadPreset = (name) => {
-		const preset = loadFilterPreset(name);
-		if (preset) {
-			toast.success(`Preset '${name}' loaded!`);
-		}
-	};
-
-	const handleDeletePreset = (name) => {
-		if (confirm(`Delete preset '${name}'?`)) {
-			deleteFilterPreset(name);
-			toast.success("Preset deleted!");
-			setSavedPresets(getAllFilterPresets());
-		}
-	};
-
-	
 	const handleExportChartImage = async (chartId, title) => {
 		setIsExporting(true);
 		await exportChartImage(chartId, title);
@@ -235,12 +195,6 @@ export default function AdminAnalyticsPage() {
 		});
 		toast.success("PDF report generated!");
 		setIsExporting(false);
-	};
-
-	const handleExportStats = () => {
-		const stats = calculateInsights();
-		exportStatsToJSON(stats, "analytics-statistics");
-		toast.success("Statistics exported as JSON!");
 	};
 
 	// Chart color schemes
@@ -443,38 +397,6 @@ export default function AdminAnalyticsPage() {
 
 	const insights = calculateInsights();
 
-	const StatCard = ({ title, value, icon, trend }) => (
-		<div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-secondary/10">
-			<div className="flex justify-between items-start mb-3">
-				<p className="text-secondary/60 text-sm uppercase tracking-wide font-semibold">{title}</p>
-				{icon && <span className="text-2xl">{icon}</span>}
-			</div>
-			<p className="text-3xl font-bold text-secondary mb-2">{value}</p>
-			{trend && <p className="text-xs text-secondary/60">{trend}</p>}
-		</div>
-	);
-
-	const ChartContainer = ({ title, chartId, children }) => (
-		<div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-secondary/10">
-			<div className="flex justify-between items-center mb-6">
-				<h3 className="text-xl font-bold text-secondary">{title}</h3>
-				{chartId && (
-					<button
-						onClick={() => handleExportChartImage(chartId, title.replace(/[^a-zA-Z0-9]/g, "-"))}
-						disabled={isExporting}
-						className="p-2 text-accent hover:text-accent/80 transition disabled:opacity-50"
-						title="Export chart as PNG"
-					>
-						<BiDownload size={18} />
-					</button>
-				)}
-			</div>
-			<div className="h-80" id={chartId}>
-				{children}
-			</div>
-		</div>
-	);
-
 	if (showApiKeyInput && !isLoading) {
 		return (
 		<div className="w-full min-h-screen p-10 bg-linear-to-b from-primary to-white">
@@ -533,84 +455,7 @@ export default function AdminAnalyticsPage() {
 						>
 							<BiDownload /> PDF Report
 						</button>
-						
-						<button
-							onClick={handleExportStats}
-							className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition flex items-center gap-2"
-						>
-							<BiDownload /> JSON Stats
-						</button>
-						<button
-							onClick={() => setShowPresetModal(true)}
-							className="px-4 py-2 bg-warning text-white rounded-lg font-semibold hover:bg-warning/90 transition flex items-center gap-2"
-						>
-							<FiSave /> Save Preset
-						</button>
 					</div>
-
-					{/* Preset Modal */}
-					{showPresetModal && (
-						<div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-							<div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-								<h2 className="text-2xl font-bold text-secondary mb-4">Save Filter Preset</h2>
-								<div className="mb-4">
-									<label className="block text-secondary font-semibold mb-2">Preset Name</label>
-									<input
-										type="text"
-										value={presetName}
-										onChange={(e) => setPresetName(e.target.value)}
-										placeholder="e.g., Q1 2026 Report"
-										className="w-full px-4 py-2 border border-secondary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-									/>
-								</div>
-								<div className="flex gap-3">
-									<button
-										onClick={() => {
-											setShowPresetModal(false);
-											setPresetName("");
-										}}
-										className="flex-1 px-4 py-2 border border-secondary/20 text-secondary rounded-lg hover:bg-secondary/5 transition"
-									>
-										Cancel
-									</button>
-									<button
-										onClick={handleSavePreset}
-										className="flex-1 px-4 py-2 bg-accent text-primary rounded-lg font-semibold hover:bg-accent/90 transition"
-									>
-										Save
-									</button>
-								</div>
-							</div>
-						</div>
-					)}
-
-					{/* Saved Presets */}
-					{savedPresets.length > 0 && (
-						<div className="mb-6 p-4 bg-white/70 rounded-xl border border-secondary/10">
-							<h3 className="text-sm font-bold text-secondary mb-3">Saved Presets</h3>
-							<div className="flex flex-wrap gap-2">
-								{savedPresets.map((preset) => (
-									<div
-										key={preset}
-										className="flex items-center gap-2 px-3 py-1 bg-secondary/10 rounded-full text-sm"
-									>
-										<button
-											onClick={() => handleLoadPreset(preset)}
-											className="text-secondary hover:text-accent transition font-medium"
-										>
-											📌 {preset}
-										</button>
-										<button
-											onClick={() => handleDeletePreset(preset)}
-											className="text-red-500 hover:text-red-700 transition"
-										>
-											<BiTrash size={14} />
-										</button>
-									</div>
-								))}
-							</div>
-						</div>
-					)}
 
 					<button
 						onClick={() => {
@@ -626,31 +471,31 @@ export default function AdminAnalyticsPage() {
 
 				{/* Key Metrics Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
-					<StatCard
+					<DashboardStatCard
 						title="Total Alumni"
 						value={insights.totalAlumni}
 						icon="👥"
 						trend="Total records in database"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Top Industry"
 						value={insights.topIndustry?.industry || "-"}
 						icon="🏢"
 						trend={`${insights.topIndustry?.count || 0} alumni`}
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Avg Employment"
 						value={`${insights.avgEmploymentDuration}m`}
 						icon="💼"
 						trend="Average duration"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Certifications"
 						value={insights.totalCertifications}
 						icon="📚"
 						trend="Professional credentials"
 					/>
-					<StatCard
+					<DashboardStatCard
 						title="Degrees"
 						value={insights.totalDegrees}
 						icon="🎓"
@@ -662,7 +507,7 @@ export default function AdminAnalyticsPage() {
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
 					{/* Chart 1: Industry Distribution - Bar Chart */}
 					{analyticsData.industry.length > 0 && (
-						<ChartContainer title="1. Industry Distribution (Bar Chart)" chartId="industry-chart">
+						<DashboardChartCard title="1. Industry Distribution (Bar Chart)" chartId="industry-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={industryChartData}
 								options={{
@@ -681,12 +526,12 @@ export default function AdminAnalyticsPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 2: Graduation Year - Line Chart */}
 					{analyticsData.graduationYear.length > 0 && (
-						<ChartContainer title="2. Graduation Year Timeline (Line Chart)" chartId="graduation-chart">
+						<DashboardChartCard title="2. Graduation Year Timeline (Line Chart)" chartId="graduation-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Line
 								data={graduationChartData}
 								options={{
@@ -704,26 +549,26 @@ export default function AdminAnalyticsPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 3: Top Industries - Pie Chart */}
 					{topIndustries.length > 0 && (
-						<ChartContainer title="3. Top 8 Industries (Pie Chart)" chartId="top-industries-chart">
+						<DashboardChartCard title="3. Top 8 Industries (Pie Chart)" chartId="top-industries-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Pie data={industryPieData} options={chartOptions} />
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 4: Degrees Distribution - Doughnut Chart */}
 					{topDegrees.length > 0 && (
-						<ChartContainer title="4. Degrees Distribution (Doughnut Chart)" chartId="degrees-chart">
+						<DashboardChartCard title="4. Degrees Distribution (Doughnut Chart)" chartId="degrees-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Doughnut data={degreesDoughnutData} options={chartOptions} />
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 5: Top Certifications - Horizontal Bar Chart */}
 					{topCerts.length > 0 && (
-						<ChartContainer title="5. Top Certifications (Horizontal Bar)" chartId="certifications-chart">
+						<DashboardChartCard title="5. Top Certifications (Horizontal Bar)" chartId="certifications-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={certificationsChartData}
 								options={{
@@ -742,12 +587,12 @@ export default function AdminAnalyticsPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 6: Bid Wins Distribution - Bar Chart */}
 					{analyticsData.bidWins.length > 0 && (
-						<ChartContainer title="6. Bid Wins Distribution (Bar Chart)" chartId="bidwins-chart">
+						<DashboardChartCard title="6. Bid Wins Distribution (Bar Chart)" chartId="bidwins-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={bidWinsChartData}
 								options={{
@@ -765,12 +610,12 @@ export default function AdminAnalyticsPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 7: Employment Start Dates - Bar Chart */}
 					{analyticsData.employmentStartDate.length > 0 && (
-						<ChartContainer title="7. Employment Start Dates (Bar Chart)" chartId="employment-dates-chart">
+						<DashboardChartCard title="7. Employment Start Dates (Bar Chart)" chartId="employment-dates-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={{
 									labels: analyticsData.employmentStartDate
@@ -805,12 +650,12 @@ export default function AdminAnalyticsPage() {
 									},
 								}}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 
 					{/* Chart 8: Employment Duration Distribution - Pie Chart */}
 					{analyticsData.employmentDuration.length > 0 && (
-						<ChartContainer title="8. Employment Duration Distribution (Pie Chart)" chartId="duration-chart">
+						<DashboardChartCard title="8. Employment Duration Distribution (Pie Chart)" chartId="duration-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Pie
 								data={{
 									labels: [
@@ -866,7 +711,7 @@ export default function AdminAnalyticsPage() {
 								}}
 								options={chartOptions}
 							/>
-						</ChartContainer>
+						</DashboardChartCard>
 					)}
 				</div>
 

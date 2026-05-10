@@ -80,22 +80,22 @@ export default function LoginPage(){
 
     return(
         // bg-no-repeat use for not showing the same image again and again when scrolling down
-    <div className="w-full h-screen bg-[url('/bg.jpg')] bg-center bg-no-repeat flex">
-        <div className="w-[50%] h-full flex justify-center items-center flex-col p-[50px]">
+    <div className="w-full min-h-screen bg-[url('/bg.jpg')] bg-center bg-no-repeat bg-cover flex flex-col lg:flex-row">
+        <div className="w-full lg:w-[50%] flex justify-center items-center flex-col p-6 sm:p-10 lg:p-[50px]">
             
             {/* you can use object-cover if image looks like shrunk */}
-            <img src="/logo.png" className="object-cover w-[200px] h-[200px] mb-[20px]" alt="logo" />
-            <h1 className="text-[50px] text-gold text-shadow-accent text-shadow-2xs text-center
+            <img src="/logo.png" className="object-cover w-[120px] h-[120px] sm:w-[170px] sm:h-[170px] lg:w-[200px] lg:h-[200px] mb-[20px]" alt="logo" />
+            <h1 className="text-[26px] sm:text-[40px] lg:text-[50px] text-gold text-shadow-accent text-shadow-2xs text-center
              font-bold">PHANTASMAGORIA LTD ALUMNI PLATFORM</h1>
-            <p className="text-[30px] text-white italic ">Where Prestige Shine and Community Unites</p>
+            <p className="text-[16px] sm:text-[24px] lg:text-[30px] text-white italic text-center">Where Prestige Shine and Community Unites</p>
 
         </div>
-        <div className="w-[50%] h-full flex justify-center items-center">
+        <div className="w-full lg:w-[50%] flex justify-center items-center px-4 pb-6 lg:pb-0">
 
             {/* use backdrop-blur-lg for blur the div and p-[30px] use for change the width of the components inside the div tag ex: input fiels & login button*/}
-            <div className="w-[450px] h-[600px] backdrop-blur-lg shadow-2xl rounded-xl flex flex-col justify-center items-center p-[30px]">
+            <div className="w-full max-w-[450px] min-h-[560px] backdrop-blur-lg shadow-2xl rounded-xl flex flex-col justify-center items-center p-5 sm:p-[30px]">
 
-                <h1 className="text-[40px] text-white text-shadow-white font-bold mb-[20px]">Login</h1>
+                <h1 className="text-[30px] sm:text-[40px] text-white text-shadow-white font-bold mb-[20px]">Login</h1>
 
                 {/* focus:ring-2 is use for when type in input field the border will blow in another color with this code focus:ring-gold, so it uses for that blowing color border size , 
                 And focus:outline-none this means disable orginel outline when appearing colord outline */}
@@ -106,7 +106,7 @@ export default function LoginPage(){
                 }}
                 type="email" 
                 placeholder="Your email" 
-                className="w-full h-[50px] mb-[20px] rounded-lg border border-accent p-[10px] text-[20px] focus:outline-none focus:ring-2 focus:ring-gold"/>
+                className="w-full h-[46px] sm:h-[50px] mb-[20px] rounded-lg border border-accent p-[10px] text-[16px] sm:text-[20px] focus:outline-none focus:ring-2 focus:ring-gold"/>
                 
                 <input 
                 onChange={(e)=>{
@@ -114,18 +114,18 @@ export default function LoginPage(){
                 }}
                 type="password" 
                 placeholder="Your password" 
-                className="w-full h-[50px] rounded-lg border border-accent p-[10px] text-[20px] focus:outline-none focus:ring-2 focus:ring-gold"/>
-                <p className="text-white w-full text-right mb-[20px]">Forgot your password? <Link to="/forget-password" className="text-gold italic">Reset it here</Link></p>
+                className="w-full h-[46px] sm:h-[50px] rounded-lg border border-accent p-[10px] text-[16px] sm:text-[20px] focus:outline-none focus:ring-2 focus:ring-gold"/>
+                <p className="text-white text-sm sm:text-base w-full text-right mb-[20px]">Forgot your password? <Link to="/forget-password" className="text-gold italic">Reset it here</Link></p>
 
                 <button 
                 onClick={login}
-                className="w-full h-[50px] bg-accent font-bold rounded-lg text-[20px] text-white border border[2px] border-accent hover:bg-transparent hover:text-accent mb-[20px]">Login</button>
-                <button onClick={googleLogin} className="w-full h-[50px] bg-accent text-white font-bold text-[20px] rounded-lg border-[2px] border-accent hover:bg-transparent hover:text-accent">
+                className="w-full h-[46px] sm:h-[50px] bg-accent font-bold rounded-lg text-[16px] sm:text-[20px] text-white border border[2px] border-accent hover:bg-transparent hover:text-accent mb-[20px]">Login</button>
+                <button onClick={googleLogin} className="w-full h-[46px] sm:h-[50px] bg-accent text-white font-bold text-[16px] sm:text-[20px] rounded-lg border-[2px] border-accent hover:bg-transparent hover:text-accent">
 						Login with <GrGoogle className="inline ml-2 mb-1" />
 					</button>
 
                 {/* To write different text color in a pragraph you have to use <span>  */}
-                <p className="text-white ">Don't have an account? <Link to="/register" className="text-gold italic">Register here</Link></p>
+                <p className="text-white text-sm sm:text-base text-center">Don't have an account? <Link to="/register" className="text-gold italic">Register here</Link></p>
             </div>
         </div>
         {isLoading && <Loader />}

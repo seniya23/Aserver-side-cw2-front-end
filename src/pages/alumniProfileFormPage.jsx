@@ -95,11 +95,11 @@ export default function AlumniProfileFormPage() {
 		<div className="min-h-screen bg-primary">
 			<PlatformHeader />
 			{isLoading && <Loader />}
-			<div className="max-w-3xl mx-auto p-6">
-				<h1 className="text-2xl font-bold text-secondary mb-4">
+			<div className="max-w-3xl mx-auto p-3 sm:p-6">
+				<h1 className="text-xl sm:text-2xl font-bold text-secondary mb-4">
 					{hasExistingProfile ? "Update Alumni Profile" : "Create Alumni Profile"}
 				</h1>
-				<form onSubmit={onSubmit} className="bg-white rounded-xl p-6 grid md:grid-cols-2 gap-4 shadow">
+				<form onSubmit={onSubmit} className="bg-white rounded-xl p-4 sm:p-6 grid md:grid-cols-2 gap-4 shadow">
 					{Object.keys(initialForm).map((field) => (
 						<div key={field} className={field === "biography" ? "md:col-span-2" : ""}>
 							<label className="text-sm text-secondary/70 capitalize">

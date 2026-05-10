@@ -5,6 +5,7 @@ import PlatformHeader from "../components/platformHeader";
 import { getCurrentUser } from "../utils/auth";
 import toast from "react-hot-toast";
 import Loader from "../components/loader";
+import CommonCard from "../components/commonCard";
 
 function resolveImageUrl(...candidates) {
 	for (const value of candidates) {
@@ -137,18 +138,18 @@ export default function HomePage() {
 	return (
 		<div className="w-full min-h-screen bg-linear-to-b from-primary to-white">
 			<PlatformHeader />
-			<div className="max-w-4xl mx-auto p-6 space-y-4">
+			<div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-4">
 				
 				
 				{user?.role === "alumni" && (
-					<div className="bg-white rounded-xl p-5 shadow">
+					<CommonCard>
 						<p className="font-semibold text-secondary mb-2">Create Alumni Post</p>
 						<textarea
 							rows={3}
 							value={newPostContent}
 							onChange={(e) => setNewPostContent(e.target.value)}
 							placeholder="Share your professional update..."
-							className="w-full border border-secondary/30 rounded-md p-3"
+							className="w-full border border-secondary/30 rounded-md p-3 text-sm sm:text-base"
 						/>
 						<button
 							onClick={createPost}
@@ -157,7 +158,7 @@ export default function HomePage() {
 						>
 							{isSubmitting ? "Posting..." : "Publish Post"}
 						</button>
-					</div>
+					</CommonCard>
 				)}
 				{feedError && <div className="bg-red-100 text-red-700 rounded-xl p-4">{feedError}</div>}
 
@@ -165,25 +166,25 @@ export default function HomePage() {
 					<Loader />
 				) : (
 					feedPosts.map((post) => (
-						<div key={post.id} className="bg-white rounded-xl p-5 shadow">
-							<div className="flex gap-4 items-start">
+						<CommonCard key={post.id}>
+							<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start">
 								<img
 									src={post.image || (post.id === "winner" ? "/default.jpg" : "/logo.png")}
 									alt={post.title}
-									className="w-14 h-14 rounded-full object-cover"
+									className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover"
 									onError={(e) => {
 										e.currentTarget.src = post.id === "winner" ? "/default.jpg" : "/logo.png";
 									}}
 								/>
 								<div className="flex-1">
-									<h2 className="text-xl font-semibold text-secondary">{post.title}</h2>
-									{post.name && <p className="text-sm text-accent font-semibold">{post.name}</p>}
+									<h2 className="text-lg sm:text-xl font-semibold text-secondary">{post.title}</h2>
+									{post.name && <p className="text-xs sm:text-sm text-accent font-semibold">{post.name}</p>}
 									{post.createdAt && (
 										<p className="text-xs text-secondary/60">
 											{new Date(post.createdAt).toLocaleString()}
 										</p>
 									)}
-									<p className="text-secondary/80 mt-2">{post.content}</p>
+									<p className="text-sm sm:text-base text-secondary/80 mt-2">{post.content}</p>
 									{post.email && (
 										<Link
 											to={`/alumni/${post.email}`}
@@ -194,7 +195,7 @@ export default function HomePage() {
 									)}
 								</div>
 							</div>
-						</div>
+						</CommonCard>
 					))
 				)}
 			</div>
