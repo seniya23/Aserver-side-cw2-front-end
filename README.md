@@ -1,4 +1,4 @@
-# Alumni Influencer Platform - Frontend (React + Vite)
+# PHANTASMAGORIA Alumni Platform - Frontend (React + Vite)
 
 This is the frontend application for the alumni influencer platform. It connects to the Express backend API and provides role-based interfaces for users, alumni, and admins.
 
