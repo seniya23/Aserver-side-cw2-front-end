@@ -111,7 +111,7 @@ export default function AdminAnalyticsPage() {
 	}
 
 	useEffect(() => {
-		// Try to load API key from localStorage
+		
 		const savedApiKey = localStorage.getItem("analyticsApiKey");
 		if (savedApiKey) {
 			setApiKey(savedApiKey);
@@ -119,7 +119,7 @@ export default function AdminAnalyticsPage() {
 		} else {
 			setShowApiKeyInput(true);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		
 	}, []);
 
 	const handleApiKeySubmit = (e) => {
@@ -246,7 +246,7 @@ export default function AdminAnalyticsPage() {
 		},
 	};
 
-	// 1. Industry Distribution - Bar Chart
+	//Industry Distribution Bar Chart
 	const industryChartData = {
 		labels: analyticsData.industry.map((item) => item.industry),
 		datasets: [
@@ -262,7 +262,7 @@ export default function AdminAnalyticsPage() {
 		],
 	};
 
-	// 2. Graduation Year Distribution - Line Chart
+	//Graduation Year Distribution Line Chart
 	const graduationChartData = {
 		labels: analyticsData.graduationYear
 			.sort((a, b) => a.graduationYear - b.graduationYear)
@@ -287,7 +287,7 @@ export default function AdminAnalyticsPage() {
 		],
 	};
 
-	// 3. Top Industries - Pie Chart
+	//Top Industries Pie Chart
 	const topIndustries = analyticsData.industry
 		.sort((a, b) => b.count - a.count)
 		.slice(0, 8);
@@ -304,7 +304,7 @@ export default function AdminAnalyticsPage() {
 		],
 	};
 
-	// 4. Degrees Distribution - Doughnut Chart
+	//Degrees Distribution Doughnut Chart
 	const topDegrees = analyticsData.degrees
 		.sort((a, b) => b.count - a.count)
 		.slice(0, 8);
@@ -321,7 +321,7 @@ export default function AdminAnalyticsPage() {
 		],
 	};
 
-	// 5. Certifications - Horizontal Bar Chart
+	//Certifications Horizontal Bar Chart
 	const topCerts = analyticsData.certifications
 		.sort((a, b) => b.count - a.count)
 		.slice(0, 8);
@@ -340,7 +340,7 @@ export default function AdminAnalyticsPage() {
 		],
 	};
 
-	// 6. Bid Wins - Bar Chart
+	//Bid Wins Bar Chart
 	const bidWinsChartData = {
 		labels: analyticsData.bidWins.map((item) => item.bidWins),
 		datasets: [
@@ -505,9 +505,9 @@ export default function AdminAnalyticsPage() {
 
 				{/* Charts Grid */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-					{/* Chart 1: Industry Distribution - Bar Chart */}
+					{/* Industry Distribution - Bar Chart */}
 					{analyticsData.industry.length > 0 && (
-						<DashboardChartCard title="1. Industry Distribution (Bar Chart)" chartId="industry-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="1. Industry Distribution " chartId="industry-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={industryChartData}
 								options={{
@@ -529,9 +529,9 @@ export default function AdminAnalyticsPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 2: Graduation Year - Line Chart */}
+					{/* Graduation Year - Line Chart */}
 					{analyticsData.graduationYear.length > 0 && (
-						<DashboardChartCard title="2. Graduation Year Timeline (Line Chart)" chartId="graduation-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="2. Graduation Year Timeline " chartId="graduation-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Line
 								data={graduationChartData}
 								options={{
@@ -552,23 +552,23 @@ export default function AdminAnalyticsPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 3: Top Industries - Pie Chart */}
+					{/*Top Industries - Pie Chart */}
 					{topIndustries.length > 0 && (
-						<DashboardChartCard title="3. Top 8 Industries (Pie Chart)" chartId="top-industries-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="3. Top 8 Industries " chartId="top-industries-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Pie data={industryPieData} options={chartOptions} />
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 4: Degrees Distribution - Doughnut Chart */}
+					{/* Degrees Distribution - Doughnut Chart */}
 					{topDegrees.length > 0 && (
-						<DashboardChartCard title="4. Degrees Distribution (Doughnut Chart)" chartId="degrees-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="4. Degrees Distribution " chartId="degrees-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Doughnut data={degreesDoughnutData} options={chartOptions} />
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 5: Top Certifications - Horizontal Bar Chart */}
+					{/*Top Certifications - Horizontal Bar Chart */}
 					{topCerts.length > 0 && (
-						<DashboardChartCard title="5. Top Certifications (Horizontal Bar)" chartId="certifications-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="5. Top Certifications " chartId="certifications-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={certificationsChartData}
 								options={{
@@ -590,9 +590,9 @@ export default function AdminAnalyticsPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 6: Bid Wins Distribution - Bar Chart */}
+					{/* Bid Wins Distribution - Bar Chart */}
 					{analyticsData.bidWins.length > 0 && (
-						<DashboardChartCard title="6. Bid Wins Distribution (Bar Chart)" chartId="bidwins-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="6. Bid Wins Distribution " chartId="bidwins-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={bidWinsChartData}
 								options={{
@@ -613,9 +613,9 @@ export default function AdminAnalyticsPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 7: Employment Start Dates - Bar Chart */}
+					{/*Employment Start Dates - Bar Chart */}
 					{analyticsData.employmentStartDate.length > 0 && (
-						<DashboardChartCard title="7. Employment Start Dates (Bar Chart)" chartId="employment-dates-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="7. Employment Start Dates " chartId="employment-dates-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={{
 									labels: analyticsData.employmentStartDate
@@ -653,9 +653,9 @@ export default function AdminAnalyticsPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 8: Employment Duration Distribution - Pie Chart */}
+					{/* Employment Duration Distribution - Pie Chart */}
 					{analyticsData.employmentDuration.length > 0 && (
-						<DashboardChartCard title="8. Employment Duration Distribution (Pie Chart)" chartId="duration-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+						<DashboardChartCard title="8. Employment Duration Distribution " chartId="duration-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Pie
 								data={{
 									labels: [

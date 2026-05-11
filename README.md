@@ -1,16 +1,111 @@
-# React + Vite
+# Alumni Influencer Platform - Frontend (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend application for the alumni influencer platform. It connects to the Express backend API and provides role-based interfaces for users, alumni, and admins.
 
-Currently, two official plugins are available:
+## Setup Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 1. Clone the repository
 
-## React Compiler
+```bash
+git clone <your-repo-url>
+cd Aserver-side-cw-front-end
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Install dependencies
 
-## Expanding the ESLint configuration
+```bash
+npm install
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3. Setup environment variables
+
+Copy the example file (or create `.env` manually if example does not exist):
+
+```bash
+cp .env.example .env
+```
+
+Then update `.env` with your values:
+
+```env
+VITE_BACKEND_URL=http://localhost:3000/api
+VITE_API_KEY_HEADER=x-api-key
+```
+
+### 4. Run frontend server
+
+```bash
+npm run dev
+```
+
+Frontend will run on:
+
+`http://localhost:5173`
+
+## Backend Setup (Express API)
+
+### 1. Navigate to backend
+
+```bash
+cd ../Aserver-side-cw-back-end
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Setup backend env
+
+Create `.env`:
+
+```env
+PORT=3000
+JWT_SECRET=your_secret_key
+GMAIL_APP_PASSWORD=your_gmail_app_password
+API_KEY_HEADER=x-api-key
+```
+
+### 4. Run backend server
+
+```bash
+npm start
+```
+
+Backend runs at:
+
+`http://localhost:3000`
+
+## Swagger API Documentation
+
+Access Swagger UI:
+
+`http://localhost:3000/api-docs`
+
+## Technologies Used
+
+### Frontend
+
+- React (Vite)
+- Axios
+- Tailwind CSS
+- React Router
+- Chart.js / react-chartjs-2
+- html2canvas + jsPDF (PDF export)
+
+### Backend
+
+- Node.js
+- Express.js
+- SQLite3
+- JWT Authentication
+- Node-cron
+- Swagger
+
+## Notes
+
+- New registrations are created as `user`
+- User can become alumni through alumni profile flow
+- Some admin pages need API keys with proper scopes
+- `VITE_API_KEY_HEADER` must match backend `API_KEY_HEADER`

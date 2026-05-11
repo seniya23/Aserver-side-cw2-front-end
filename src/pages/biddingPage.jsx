@@ -32,7 +32,7 @@ export default function BiddingPage() {
 
 	useEffect(() => {
 		loadBiddingData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		
 	}, []);
 
 	if (!token) return <Navigate to="/login" replace />;

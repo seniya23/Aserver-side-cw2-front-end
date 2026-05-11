@@ -21,7 +21,7 @@ export default function AdminApiKeysPage() {
 	const token = localStorage.getItem("token");
 	const apiBase = import.meta.env.VITE_BACKEND_URL;
 
-	// Available permissions
+	
 	const availablePermissions = [
 		{ value: "read:alumni", label: "Read Alumni Data" },
 		{ value: "read:analytics", label: "Read Analytics" },

@@ -68,7 +68,7 @@ export default function HomePage() {
 			}
 		}
 		loadHomeData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		
 	}, [token]);
 
 	const feedPosts = useMemo(() => {

@@ -45,7 +45,7 @@ export default function AdminAlumniOfDayPage() {
 		} else {
 			setShowApiKeyInput(true);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		
 	}, []);
 
 	function handleApiKeySubmit(e) {

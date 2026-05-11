@@ -103,7 +103,7 @@ export async function generatePDFReport(config) {
 
 		// Add charts
 		for (const chart of charts) {
-			// Check if we need a new page
+			
 			if (yPosition > pageHeight - minSpaceForContent) {
 				pdf.addPage();
 				yPosition = 20;
@@ -200,9 +200,8 @@ function createTableHTML(data) {
 	return table;
 }
 
-/**
- * Remove temporary table from DOM
- */
+
+//Remove temporary table from DOM
 export function removeTemporaryTable(table) {
 	if (table && table.parentNode) {
 		table.parentNode.removeChild(table);

@@ -66,7 +66,7 @@ export default function AdminBiddingPage() {
 				Authorization: `Bearer ${token}`,
 			};
 
-			// Fetch all bidding data from backend
+			
 			const bidsRes = await axios.get(`${apiBase}/bidding/admin/all-bids`, {
 				headers,
 			});
@@ -105,7 +105,7 @@ export default function AdminBiddingPage() {
 	}
 
 	useEffect(() => {
-		// Try to load API key from localStorage
+		
 		const savedApiKey = localStorage.getItem("biddingApiKey");
 		if (savedApiKey) {
 			setApiKey(savedApiKey);
@@ -113,7 +113,7 @@ export default function AdminBiddingPage() {
 		} else {
 			setShowApiKeyInput(true);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		
 	}, []);
 
 	const handleApiKeySubmit = (e) => {
@@ -310,7 +310,7 @@ export default function AdminBiddingPage() {
 
 	const insights = calculateInsights();
 
-	// Bid Status distribution
+	
 	const bidStatusData = {
 		labels: ["Active", "Won", "Pending"],
 		datasets: [
@@ -331,7 +331,7 @@ export default function AdminBiddingPage() {
 		],
 	};
 
-	// Bid Amount distribution
+	
 	const bidAmountData = {
 		labels: biddingData.allBids.map((_, i) => `Bid ${i + 1}`).slice(0, 10),
 		datasets: [
@@ -478,7 +478,7 @@ export default function AdminBiddingPage() {
 					</div>
 				</div>
 
-				{/* Key Metrics Cards */}
+				
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
 					<DashboardStatCard
 						title="Total Bids"
@@ -519,16 +519,16 @@ export default function AdminBiddingPage() {
 
 				{/* Charts Grid */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-					{/* Chart 1: Bid Status Distribution */}
+					{/* Bid Status Distribution */}
 					{biddingData.allBids.length > 0 && (
-					<DashboardChartCard title="1. Bid Status Distribution (Pie Chart)" chartId="bid-status-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+					<DashboardChartCard title="1. Bid Status Distribution " chartId="bid-status-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Pie data={bidStatusData} options={chartOptions} />
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 2: Bid Amount Trend */}
+					{/* Bid Amount Trend */}
 					{biddingData.allBids.length > 0 && (
-					<DashboardChartCard title="2. Bid Amount Trend (Line Chart)" chartId="bid-amount-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+					<DashboardChartCard title="2. Bid Amount Trend " chartId="bid-amount-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Line
 								data={bidAmountData}
 								options={{
@@ -549,9 +549,9 @@ export default function AdminBiddingPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 3: Top Bidders */}
+					{/* Top Bidders */}
 					{topBidders.length > 0 && (
-					<DashboardChartCard title="3. Top 8 Bidders (Bar Chart)" chartId="top-bidders-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+					<DashboardChartCard title="3. Top 8 Bidders " chartId="top-bidders-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Bar
 								data={topBiddersData}
 								options={{
@@ -573,9 +573,9 @@ export default function AdminBiddingPage() {
 						</DashboardChartCard>
 					)}
 
-					{/* Chart 4: Monthly Bid Trend */}
+					{/* Monthly Bid Trend */}
 					{biddingData.allBids.length > 0 && (
-					<DashboardChartCard title="4. Monthly Bidding Trend (Line Chart)" chartId="monthly-trend-chart" onExport={handleExportChartImage} isExporting={isExporting}>
+					<DashboardChartCard title="4. Monthly Bidding Trend " chartId="monthly-trend-chart" onExport={handleExportChartImage} isExporting={isExporting}>
 							<Line
 								data={monthlyBidData}
 								options={{
